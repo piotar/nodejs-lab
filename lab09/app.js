@@ -24,16 +24,17 @@ const express = require('express');
 const app = express();
 
 const checkAuth = (req, res, next) => {
-    if(req.headers.authorization){
+    if(req.headers.authorization==="alamakota"){
         console.log(req.headers.authorization)
         next();
     }else{
-        res.send("unauthorized user")
+        res.status(401).send("unauthorized user")
     }
 };
+app.use(checkAuth);
 
 app.get('/', checkAuth, (req, res) => {
-    
+    res.send("halo")
 });
 
 app.listen(4000, () => console.log('start server'));
