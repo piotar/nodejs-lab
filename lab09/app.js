@@ -3,10 +3,14 @@
 // i wyświetlenie w konsoli informacji na jaki adres użytkownik próbuje się dostać,
 // jaką metodą oraz czy zawiera w sobie parametry.
 
+// 2. Kolejnym zadaniem jest stworzenie middleware, który zabezpieczy naszą aplikację dla osób nie upoważnionych.
+// Użytkownik powinien wysłać w nagłówku token, który autoryzuje go i wpuszcza do dalszej części aplikacji.
+// Przyjmijmy że nazwa nagłówka to authorization, a wartość która wpuszcza nas do systemu to alamakota.
+
 const express = require("express");
 const app = express();
 
-const listenerMiddleware = (req, res, next) => {
+const logMiddleware = (req, res, next) => {
   console.log("Url:", req.url);
   console.log("Query params", req.query);
   console.log("Params:", req.params);
@@ -14,9 +18,18 @@ const listenerMiddleware = (req, res, next) => {
   next();
 };
 
-//app.use(listenerMiddleware);
+const authMiddleware = (req, res, next) => {
+  if (!(req.headers.authorization === "alamakota")) {
+    res.sendStatus(401);
+    return;
+  }
+  next();
+};
 
-app.get("/:id", listenerMiddleware, (req, res) => {
+app.use(logMiddleware);
+app.use(authMiddleware);
+
+app.get("/", (req, res) => {
   res.sendStatus(200);
 });
 
