@@ -1,6 +1,11 @@
 const express = require("express");
 const app = express();
 
+const users = [
+  { login: "jan", password: "alamakota" },
+  { login: "pawel", password: "czterylitery" },
+];
+
 const logMiddleware = (req, res, next) => {
   console.log(req.method, req.url);
   console.log(req.params, req.query);
@@ -8,10 +13,15 @@ const logMiddleware = (req, res, next) => {
 };
 
 const authMiddleware = (req, res, next) => {
-  if (req.headers.authorization === "alamakota") {
+  const [login, password] = req.headers.authorization.split(":");
+
+  let user = users.find((u) => u.login === login);
+
+  if (user && user.password === password) {
+    req.user = user;
     next();
   } else {
-    res.status(401).send("unauthorized user");
+    res.status(401).send("unauthorized");
   }
 };
 
