@@ -1,10 +1,13 @@
 const express = require("express");
+const bodyParser = require("body-parser");
 const app = express();
 
 const users = [
   { login: "jan", password: "alamakota" },
   { login: "pawel", password: "czterylitery" },
 ];
+
+const dict = ["disco polo", "piwo", "hazard", "cukierki"];
 
 const logMiddleware = (req, res, next) => {
   console.log(req.method, req.url);
@@ -27,9 +30,18 @@ const authMiddleware = (req, res, next) => {
 
 app.use(logMiddleware);
 app.use(authMiddleware);
+app.use(bodyParser.text());
 
 app.get("/", (req, res) => {
   res.send("hola hola");
+});
+
+app.post("/", (req, res) => {
+  if (dict.some((word) => req.body.includes(word))) {
+    res.status(400).send("brzydkie słowa");
+  } else {
+    res.send("jest git");
+  }
 });
 
 app.listen(4000);
