@@ -10,12 +10,15 @@
 // 3. Zmodyfikujmy zadanie 2 tak aby nagłówek authorization składał się z użytkownika
 // i hasła (wzór: login:password, np. jan:alamakota)
 // oraz sprawdżmy czy w systemie jest taki użytkownik z takim hasłem.
-// Jeżeli użytkownik istnieje, powinniśmy zmodyfikować request, aby dodać znalezionego użytkownika.
+// Jeżeli użytkownik istnieje, powinniśmy zmodyfikować request, aby przekazać znalezionego użytkownika dalej.
 
 const express = require("express");
 const app = express();
 
-const users = [];
+const users = [
+  { login: "jan", password: "alamakota" },
+  { login: "adam", password: "kotmaale" },
+];
 
 const logMiddleware = (req, res, next) => {
   console.log("Url:", req.url);
@@ -26,29 +29,18 @@ const logMiddleware = (req, res, next) => {
 };
 
 const authMiddleware = (req, res, next) => {
-  const [name, password] = req.headers.authorization.split(":");
+  const [login, password] = req.headers.authorization.split(":");
 
-  console.log(name, password);
+  console.log(login, password);
 
-  let user = users.find((u) => (u.name = name));
+  let user = users.find((u) => u.login === login);
 
-  if (user) {
-    if (user.password !== password) {
-      res.sendStatus(401);
-      return;
-    }
+  if (user && user.password === password) {
+    req.user = user;
+    next();
   } else {
-    user = { name, password };
-    users.push(user);
+    res.sendStatus(401);
   }
-
-  next();
-
-  //   if (!(req.headers.authorization === "alamakota")) {
-  //     res.sendStatus(401);
-  //     return;
-  //   }
-  //   next();
 };
 
 app.use(logMiddleware);
