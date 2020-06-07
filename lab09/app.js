@@ -67,7 +67,6 @@
 
 // const authorizationMiddleware = (req, res, next) => {
 //   const [login, password] = req.headers.authorization.split(":");
-// };
 
 // console.log(login, password);
 
@@ -79,6 +78,7 @@
 // } else {
 //   res.sendStatus(401);
 // }
+// };
 
 // app.use(customMiddleware);
 // app.use(authorizationMiddleware);
@@ -101,6 +101,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express();
+const fs = require("fs");
 
 const users = [
   { login: "jan", password: "alamakota" },
@@ -117,18 +118,16 @@ const customMiddleware = (req, res, next) => {
 
 const authorizationMiddleware = (req, res, next) => {
   const [login, password] = req.headers.authorization.split(":");
+  console.log(login, password);
+  let user = users.find((u) => u.login === login);
+
+  if (user && user.password === password) {
+    req.user = user;
+    next();
+  } else {
+    res.sendStatus(401);
+  }
 };
-
-console.log(login, password);
-
-let user = users.find((u) => u.login === login);
-
-if (user && user.password === password) {
-  req.user = user;
-  next();
-} else {
-  res.sendStatus(401);
-}
 
 // app.use(customMiddleware);
 // app.use(authorizationMiddleware);
@@ -142,8 +141,17 @@ app.post("/", (req, res) => {
   if (dictionary.some((word) => req.body.includes(word))) {
     res.status(400).send("Zakazane słowo");
   } else {
-    res.send("Tekst jest poprawny");
+    fs.writefile("text.txt", req.body, (err) => {
+      return err ? err.message : console.log("Zapisano");
+    });
+    res.send(req.body);
   }
+});
+
+app.get("/", (req, res) => {
+  fs.readfile("./text.txt", "utf-8", (err, data) => {
+    res.send(data);
+  });
 });
 
 app.listen(4000, () => console.log("start server"));
