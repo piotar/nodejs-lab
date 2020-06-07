@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const bodyParser = require("body-parser");
 
 const users = [
   {
@@ -31,8 +32,20 @@ const customMiddleware = (req, res, next) => {
 
 app.use(customMiddleware);
 
+app.use(bodyParser.text());
+const illegalWords = ["disco polo", "piwo", "hazard", "cukierki"];
+
 app.get("/", customMiddleware, (req, res) => {
   res.send("halo");
+});
+
+app.post("/", (req, res) => {
+  const hasIllegalWords = illegalWords.some((word) => req.body.includes(word));
+  if (hasIllegalWords) {
+    res.status(400).send("nie cenzuralne slowo");
+  } else {
+    res.send("ok");
+  }
 });
 
 app.listen(4000, () => console.log("start server"));
