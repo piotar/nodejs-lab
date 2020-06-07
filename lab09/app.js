@@ -3,6 +3,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
+const fs = require('fs');
 
 // ------------------------ zad 1
 
@@ -43,25 +44,52 @@ const app = express();
 
 // ---------------- zad 3
 
-const users = [
-    {name: 'jan',
-     password: 'alamakota'}
-]
+// const users = [
+//     {name: 'jan',
+//      password: 'alamakota'}
+// ]
 
-const authorizationMiddleware = (req, res, next) => {
-    if(!req.headers.authorization) {
-       res.sendStatus(401);
+// const authorizationMiddleware = (req, res, next) => {
+//     if(!req.headers.authorization) {
+//        res.sendStatus(401);
+//     } else {
+//         const [name, password] = req.headers.authorization.split(":");
+//         const user = users.find(user => user.name === name);
+//         user ? res.send(user) : res.sendStatus(404);
+//     }
+// }
+// app.use(authorizationMiddleware);
+
+// app.get('/',(req, res) => {
+//     res.send('działa');
+// });
+
+// ----------------- zad 4
+
+app.use(bodyParser.text());
+
+const forbiddenWords = ['disco polo', 'piwo', 'hazard', 'cukierki'];
+
+app.post('/',(req, res) => {
+    console.log(req.body);
+    const hasForbiddenWords = forbiddenWords.some(el => req.body.includes(el));
+    if(hasForbiddenWords) {
+        res.sendStatus(400);
     } else {
-        const [name, password] = req.headers.authorization.split(":");
-        const user = users.find(user => user.name === name);
-        user ? res.send(user) : res.sendStatus(404);
+        fs.writeFile('text.txt', req.body, (err) => {
+            return err ? err.message :  console.log('zapisano');
+        })
+        res.send(req.body);
     }
-}
-app.use(authorizationMiddleware);
-
-app.get('/',(req, res) => {
-    res.send('działa');
 });
+
+app.get('/', (req, res) => {
+    fs.readFile('./text.txt', 'utf-8', (err, data) => {
+        return data ? res.send(data) : err.message;
+    })
+})
+
 app.listen(5000, ()=> {
     console.log(`it works`);
 })
+
