@@ -5,10 +5,10 @@ const app = express();
 
 const customMiddleware = (req, res, next) => {
     console.log(
-        `Address: ${req.url}, Method: ${req.method}, ${req.query ? req.query : "nope"//
-        //req.params ? req.params : "nope"
-        }`
+        `Address: ${req.url}, Method: ${req.method}`
     );
+    console.log(req.query, req.params);
+
     next();
 };
 
