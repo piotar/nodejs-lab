@@ -1,7 +1,7 @@
 var express = require("express");
 var app = express();
 
-
+//Zadanie 1
 const logger = (req, res, next) => {
     console.log(req.method);
     console.log(req.url);
@@ -18,8 +18,10 @@ const parameter = (req, res) => {
 
     res.send("Koniec");
 }
+app.use(logger);
+//Zad1
+//Zad2
 
-app.get('/', (req, res) => {
-    res.send("Witaj na stronie");
+//Zad2
 
-    app.listen(4600, () => console.log("Serwer działaaaaaa"));
+app.listen(4600, () => console.log("Serwer działaaaaaa"));
