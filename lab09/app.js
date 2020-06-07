@@ -8,7 +8,7 @@ const customMiddleware = (req, res, next) => {
     next();
 };
 
-// zad 2. Autoryzacja dostepu do tresci w headerze key = Authorization oraz value = alamakota
+// zad 2. Autoryzacja dostepu do tresci w postman w headerze key = Authorization oraz value = alamakota
 app.use((req, res, next)=>{
     const password = req.headers.authorization;
     if(password === 'alamakota'){

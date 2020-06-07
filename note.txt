@@ -15,9 +15,14 @@ zacomitowanie zmian                                     git commit -m 'testowy c
 wrzucenie wszystkich commitow na branch zdalnie         git push (lub git push --set-upstream origin daniel.iwaszko)
 
 
-??? 55:00                                                   git merge
-pobiera do swojego repo (brancha) zmiany z innego brancha   git merge origin/hanna.cylwik
-??? 55:00                                                   git fetch --all
+??? 55:00                                                        git merge
+przed mergem trzeba zacommitowac lub wrzucic do stash zmiany !   git commit -m 'cost tam'
+pobiera do swojego repo (brancha) zmiany z innego brancha        git merge origin/hanna.cylwik
+zazwyczaj przy git merge pojawiaja sie konflikty i trzeba je rozwiazac (wybrac wersje, ktora chcemy miec (wtyczka gitlens)
+po rozwiazaniu konfliktow (wybraniu wlasciwej wersji) dodajemy   git add .
+a nastepnie                                                      git commit -m 'tresc'
+jezeli wyswietli sie vim to wyjsc mozna                          :q
+??? 55:00                                                        git fetch --all
 
 zmieniamy katalog na konkretne laboratorium (do pracy)  cd lab09
 
