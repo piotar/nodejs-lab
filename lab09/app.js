@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const bodyParser = require('body-parser');
+const fs = require('fs');
 
 //// ZADANIE 1
 
@@ -68,17 +69,23 @@ const forbiddenWords = ['disco polo', 'piwo', 'hazard', 'cukierki'];
 
 app.use(bodyParser.text());
 
-app.get("/", (req, res) => {
+app.post("/", (req, res) => {
     const ifForbid = forbiddenWords.some(w => req.body.includes(w))
     if (ifForbid) {
         res.status(400).send("Forbidden word");
     } else {
+        fs.writeFile('mess.txt', req.body, 'utf-8', (err) => {
+            return err ? err.message : console.log("Zapisano");
+        });
         res.send("ok, let's go");
     };
 });
 
-// app.get("/", (req, res) => {
-//     res.send("ok, let's go");
-// });
+app.get("/", (req, res) => {
+    fs.readFile('./mess.txt', 'utf-8', (err, data) => {
+        return err ? err.message : res.send(data);
+    });
+
+});
 
 app.listen(3000);
