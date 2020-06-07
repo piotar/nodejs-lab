@@ -3,9 +3,9 @@ const express = require("express");
 const app = express();
 
 const myMiddleware = (req, res, next) => {
-  console.log("request URL:", req.originalUrl);
-  console.log("request type:", req.method);
-  console.log("log params:", req.params);
+  console.log("URL:", req.originalUrl);
+  console.log("method:", req.method);
+  console.log("params:", req.params);
   next();
 };
 
