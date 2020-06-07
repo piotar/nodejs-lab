@@ -12,7 +12,7 @@ const customMiddleware = (req, res, next) => {
   if (auth === token) {
     return next();
   }
-  return res.status(400).send("Access denied");
+  return res.status(403).send("Access denied");
 };
 
 app.use(customMiddleware);
