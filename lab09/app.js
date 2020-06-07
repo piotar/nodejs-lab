@@ -8,10 +8,20 @@ const customMiddleware = (req, res, next) => {
     next();
 };
 
+// zad 2. Autoryzacja dostepu do tresci w headerze key = Authorization oraz value = alamakota
+app.use((req, res, next)=>{
+    const password = req.headers.authorization;
+    if(password === 'alamakota'){
+      next();
+    } else {
+      res.sendStatus(401);
+    }
+})
+
 app.use(customMiddleware);
 
 app.get('/:id?', /* customMiddleware ,*/ (req, res) => {
-    res.send("hej hej");
+    res.send("masz dostęp!");
 });
 
 app.listen(4000, () => console.log('start server'));

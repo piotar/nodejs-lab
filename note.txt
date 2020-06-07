@@ -15,10 +15,17 @@ zacomitowanie zmian                                     git commit -m 'testowy c
 wrzucenie wszystkich commitow na branch zdalnie         git push (lub git push --set-upstream origin daniel.iwaszko)
 
 
+??? 55:00                                                   git merge
+pobiera do swojego repo (brancha) zmiany z innego brancha   git merge origin/hanna.cylwik
+??? 55:00                                                   git fetch --all
+
 zmieniamy katalog na konkretne laboratorium (do pracy)  cd lab09
 
-npm i
-npm i express
-npm i nodemon
-nodemon app.js
+instalacja:
+    npm i
+    npm i express
+    npm i nodemon
+    nodemon app.js
 
+korzystamy z postman do sprawdzania nagłówków (headerów)
+w headers możemy wysyłać dane   key = Authorization     value = alamakota
