@@ -34,14 +34,30 @@ const checkAuthorization = (req, res, next) => {
   if (req.headers.authorization === "alamakota") {
     next();
   } else {
-    res.status(401).send("unauthorized user");
+    res.status(401).send("Unauthorized user");
   }
 };
 
 app.use(checkAuthorization);
 
 app.get("/", (req, res) => {
-  res.send("Hello");
+  res.send("Authorized user");
 });
 
 app.listen(4000, () => console.log("start server"));
+
+// Zadanie 3
+// Zmodyfikujmy zadanie 2 tak aby nagłówek authorization składał się z użytkownika i hasła (wzór: login:password,
+// np. jan:alamakota) oraz sprawdżmy czy w systemie jest taki użytkownik z takim hasłem. Jeżeli użytkownik istnieje,
+// powinniśmy zmodyfikować request, aby dodać znalezionego użytkownika.
+
+// Zadanie 4
+// Wykorzystując zewnętrzny middleware body-parser, odczytajmy zawartość żądania typu text i sprawdźmy czy w przesłanym
+// przez użytkownika tekście nie zostały umieszczone niecenzuralne słowa. Jeżeli jakieś słowo podane ze słownika znajduje
+// się w żądaniu zakończmy cykl wysyłając błąd dla użytkownika końcowego(status błędu 400). Przykładowy słowinik zakazanych
+// słów: ['disco polo', 'piwo', 'hazard', 'cukierki']
+
+// Stwórzmy tutaj dodatkowo REST API do zapisu i wyświetlania zawartości przesłanego tekstu przez użytkownika. Zapiszmy
+// to na dysku w pliku tektowym
+
+// Zadanie 5
