@@ -4,6 +4,7 @@
   "description": "[Zadania do wykonania na laboratorium](https://github.com/piotar/nodejs/tree/master/lab09)",
   "main": "app.js",
   "dependencies": {
+    "body-parser": "^1.19.0",
     "express": "^4.17.1"
   },
   "devDependencies": {},
