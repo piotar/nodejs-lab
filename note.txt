@@ -40,3 +40,9 @@ natomiast jak przeslemy w consoli przegldarki  fetch("http://localhost:4000", {h
 
 funkcja do przekonwertowania base64 na stringa w przegladarce w konsoli w "Basic Auth"    atob('ciag znaków')
 jest jeszcze Bearer Token - tez popularny
+
+do zad 3 w przegladarce     fetch("http://localhost:4000", {headers: {authorization: "Daniel:mojehaslo"}}).then(res => console.log(res))
+
+do zad 4 instalacja:
+        npm i body-parser
+        w postman wpisujac w body -> raw wpisujac "ala ma cukierki" wyrzuci zakazane slowo, a jak "wpiszemy ala ma cukierka" to wszystko bedzie ok

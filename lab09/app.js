@@ -1,5 +1,7 @@
+const bodyParser = require('body-parser');
 const express = require('express');
 const app = express();
+const fs = require('fs');
 
 const users = [
     {
@@ -31,7 +33,10 @@ const customMiddleware = (req, res, next) => {
 
 // zad 3.
 const authMiddleware = (req, res, next) => {
-    const [login, password] = req.headers.authorization.split(":");
+    
+console.log(req.headers);
+
+    const [login, password] = (req.headers.authorization || '').split(":");
   
     console.log(login, password);
   
@@ -45,11 +50,31 @@ const authMiddleware = (req, res, next) => {
     }
   };
 
-app.use(authMiddleware);
-app.use(customMiddleware);
+// app.use(authMiddleware);
+// app.use(customMiddleware);
+
+app.use(bodyParser.text());
+
+const forbiddenWords = ['disco polo', 'piwo', 'hazard', 'cukierki'];
 
 app.get('/:id?', /* customMiddleware ,*/ (req, res) => {
-    res.send("masz dostęp!");
+    console.log(req.body);
+
+    const hasForbiddenWord = forbiddenWords.some(word => req.body.includes(word));
+    if (hasForbiddenWord) {
+        res.status(400).send('zakazane słowo');
+    } else {
+        fs.writeFile('zapis.txt', req.body, (err) => {
+            return err ? err.message : console.log('zapisano');
+        })
+        res.send("masz dostęp!");
+    }
 });
+
+app.get('/', (req, res) => {
+    fs.readFile('./zapis.txt', 'utf-8', (err, data) => {
+        res.send(data);
+    })
+})
 
 app.listen(4000, () => console.log('start server'));
