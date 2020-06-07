@@ -1,0 +1,24 @@
+
+klonowanie repo			                        	    git clone https://github.com/piotar/nodejs-lab.git
+zmiana katalogu na lab09		                        cd .\nodejs-lab\
+na masterze nie pracujemy! 
+jedynie bierzemy z niego zmiany!
+tworzymy branch					            	        git checkout -b daniel.iwaszko
+pokazuje na jakim branchu jestesmy (lokalnie!)	        git branch
+sprawdzamy status					                    git status
+wysyłamy 1 zmiany z parametrami	na repo prowadzacego	git push --set-upstream origin daniel.iwaszko
+nastepne pushowanie moze byc bez parametrow		        git push
+
+dodajemy cały katalog do sledzenia (.)                  git add .
+                                                        git status
+zacomitowanie zmian                                     git commit -m 'testowy commit'
+wrzucenie wszystkich commitow na branch zdalnie         git push (lub git push --set-upstream origin daniel.iwaszko)
+
+
+zmieniamy katalog na konkretne laboratorium (do pracy)  cd lab09
+
+npm i
+npm i express
+npm i nodemon
+nodemon app.js
+
