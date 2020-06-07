@@ -22,8 +22,8 @@ zazwyczaj przy git merge pojawiaja sie konflikty i trzeba je rozwiazac (wybrac w
 po rozwiazaniu konfliktow (wybraniu wlasciwej wersji) dodajemy   git add .
 a nastepnie                                                      git commit -m 'tresc'
 jezeli wyswietli sie vim to wyjsc mozna                          :q
-??? 55:00                                                        git fetch --all
-
+pobieranie wszystkich zmian / branchy                            git fetch --all
+przelaczenie sie na inne branche                                 g
 zmieniamy katalog na konkretne laboratorium (do pracy)  cd lab09
 
 instalacja:
@@ -34,3 +34,9 @@ instalacja:
 
 korzystamy z postman do sprawdzania nagłówków (headerów)
 w headers możemy wysyłać dane   key = Authorization     value = alamakota
+w przegladarce w console jest funkcja (fech ktora jest promisem) fetch("http://localhost:4000").then(res => console.log(res)) - zwroci nam statuscode nieautoryzowany
+natomiast jak przeslemy w consoli przegldarki  fetch("http://localhost:4000", {headers: {authorization: "alamakota"}}).then(res => console.log(res)) - dostaniemy autoryzacje
+
+
+funkcja do przekonwertowania base64 na stringa w przegladarce w konsoli w "Basic Auth"    atob('ciag znaków')
+jest jeszcze Bearer Token - tez popularny
