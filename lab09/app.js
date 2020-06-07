@@ -5,15 +5,31 @@ const bodyParser = require('body-parser');
 const app = express();
 
 // zad 1
-app.use((req, res, next) => {
+
+const customMiddleware = (req, res, next) => {
     const reqUrl = req.url;
     const reqMethod = req.method;
-    const reqParams = req.query;
-    console.log(`show adress: ${reqUrl}, method: ${reqMethod} params${reqParams}`);
+    // const reqParams = req.query;
+    const reqParams = req.params;
+    console.log(`show adress: ${reqUrl}, 
+                 method: ${reqMethod},
+                 params${reqParams ? reqParams : "nothing"}`);
     next();
-})
+}
+// app.use((req, res, next) => {
+//     const reqUrl = req.url;
+//     const reqMethod = req.method;
+//     // const reqParams = req.query;
+//     const reqParams = req.params;
+//     console.log(`show adress: ${reqUrl}, 
+//                  method: ${reqMethod},
+//                  params${reqParams ? reqParams : "nothing"}`);
+//     next();
+// })
 
-app.get('/id?', (req, res, next) => {
+app.use(customMiddleware);
+
+app.get('/:id?',(req, res) => {
     res.send('Pozdrawiam');
 });
 
