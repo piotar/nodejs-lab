@@ -1,6 +1,10 @@
 const express = require('express');
 const app = express();
 
+const users = [
+  {jan: 'alamakota'}
+]
+
 // app.use((req, res, next)=>{
 //   console.log(req.url);
 //   console.log(req.params);
@@ -10,13 +14,18 @@ const app = express();
 // })
 
 app.use((req, res, next)=>{
-  const password = req.headers.authorization;
-  if(password==='alamakota'){
+  const user = req.headers.authorization;
+  const [name, password] = user.split(':');
+
+  const ok = users.find( u => u[name]===password );
+  
+  if(ok){
+    console.log(users[name]);
+    req.user = name;
     next();
   } else {
     res.sendStatus(401);
   }
-  
 })
 
 app.get('/', (req, res)=>{
