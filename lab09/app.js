@@ -4,7 +4,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const app = express();
 
-// zad 1
+// ------------------------ zad 1
 
 // const customMiddleware = (req, res, next) => {
 //     const reqUrl = req.url;
@@ -22,23 +22,45 @@ const app = express();
 // });
 
 
-// zad 2
+// ---------------- zad 2
 
+
+// const authorizationMiddleware = (req, res, next) => {
+//     if(req.headers.authorization === "alamakota") {
+//        res.send('Dostęp potwierdzony');
+//     } else {
+//         res.sendStatus(401);
+//     }
+// }
+// app.use(authorizationMiddleware);
+
+// app.get('/',(req, res) => {
+//     res.send('działa');
+// });
+// app.listen(5000, ()=> {
+//     console.log(`it works`);
+// })
+
+// ---------------- zad 3
+
+const users = [
+    {name: 'jan',
+     password: 'alamakota'}
+]
 
 const authorizationMiddleware = (req, res, next) => {
-    if(req.headers.authorization === "alamakota") {
-       res.send('Dostęp potwierdzony');
+    if(!req.headers.authorization) {
+       res.sendStatus(401);
     } else {
-        res.sendStatus(401);
+        const [name, password] = req.headers.authorization.split(":");
+        const user = users.find(user => user.name === name);
+        user ? res.send(user) : res.sendStatus(404);
     }
 }
 app.use(authorizationMiddleware);
 
-
-
-
 app.get('/',(req, res) => {
-    res.send('Pozdrawiam');
+    res.send('działa');
 });
 app.listen(5000, ()=> {
     console.log(`it works`);
