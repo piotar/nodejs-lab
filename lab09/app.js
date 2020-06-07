@@ -12,6 +12,8 @@ const users = [
   },
 ];
 
+const forbiddenWords = ['disco polo', 'piwo', 'hazard', 'cukierki'];
+
 // const showInfo = (req, res, next) => {
 //   console.log('Params: ', req.params);
 //   console.log('Method: ', req.method);
@@ -34,9 +36,26 @@ const authorize = (req, res, next) => {
   }
 };
 
+app.use(bodyParser.text());
+
+app.get('/', async (req, res) => {
+  try {
+    const text = req.body.split();
+    const isForbidden = forbiddenWords.some((w) => req.body.includes(w));
+
+    if (isForbidden) {
+      res.status(400).send('Forbidden word');
+    } else {
+      res.send('Ok');
+    }
+  } catch (err) {
+    console.log(err.message);
+  }
+});
+
 app.use(authorize);
 
-app.get('/', (req, res) => {
+app.get('/user', (req, res) => {
   res.status(200).send(req.user);
 });
 
