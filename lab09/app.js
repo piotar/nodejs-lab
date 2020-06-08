@@ -1,26 +1,28 @@
+const fs = require('fs');
+const util = require('util');
 const express = require('express');
+const bodyParser = require('body-parser');
+
 const app = express();
+
+const writeFile = util.promisify(fs.writeFile);
+const readFile = util.promisify(fs.readFile);
 
 const users = [
   {jan: 'alamakota'}
-]
+];
 
-// app.use((req, res, next)=>{
-//   console.log(req.url);
-//   console.log(req.params);
-//   console.log(req.query);
-//   console.log(req.method);
-//   next();
-// })
+const forbid = ['disco polo', 'piwo', 'hazard', 'cukierki'];
+
+app.use(bodyParser.text());
 
 app.use((req, res, next)=>{
   const user = req.headers.authorization;
   const [name, password] = user.split(':');
 
   const ok = users.find( u => u[name]===password );
-  
+
   if(ok){
-    console.log(users[name]);
     req.user = name;
     next();
   } else {
@@ -28,17 +30,40 @@ app.use((req, res, next)=>{
   }
 })
 
-app.get('/', (req, res)=>{
-  res.sendStatus(200);
+app.get('/', async (req, res, next)=>{
+  try {
+    const text = await readFile('./text.txt', 'utf-8');
+    res.send(text);
+  } catch (e) {
+    next(e);
+  }
+
 })
 
 app.get('/:id', (req, res)=>{
-
   res.send(req.params);
 })
 
-app.post('/', (req, res)=>{
-  res.sendStatus(200);
+app.post('/', async (req, res, next)=>{
+  const text = req.body;
+  let ok = true;
+
+  forbid.map( w => text.includes(w) && (ok = false) );
+
+  if(ok){
+    try {
+      await writeFile('text.txt', text);
+      res.send("Zapisano do pliku");
+    } catch (e) {
+      next(e);
+    }
+  } else {
+    res.status(400).send('Forbidden word!');
+  }
 })
 
-app.listen(4500, ()=> console.log('Server started'))
+app.use((err, req, res) => {
+  res.status(500).send('Something broke!');
+})
+
+app.listen(4500, () => console.log('Server started'));
