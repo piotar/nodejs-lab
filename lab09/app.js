@@ -30,7 +30,23 @@ app.use((req, res, next)=>{
   }
 })
 
-app.get('/', async (req, res, next)=>{
+const pathMiddleware = async (req, res, next) => {
+  const path = req.query.path;
+  if(fs.existsSync(path)){
+    try {
+      const text = await readFile('./text.txt', 'utf-8');
+      console.log('plik znaleziony');
+      res.send(text);
+    } catch (e) {
+      next(e);
+    }
+  } else {
+    console.log("nie znaleziono pliku");
+    next();
+  }
+}
+
+app.get('/', pathMiddleware, async (req, res, next)=>{
   try {
     const text = await readFile('./text.txt', 'utf-8');
     res.send(text);
