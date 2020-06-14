@@ -12,13 +12,22 @@
 // oraz sprawdżmy czy w systemie jest taki użytkownik z takim hasłem.
 // Jeżeli użytkownik istnieje, powinniśmy zmodyfikować request, aby przekazać znalezionego użytkownika dalej.
 
+// 4. Wykorzystując zewnętrzny middleware body-parser, odczytajmy zawartość żądania typu text
+// i sprawdźmy czy w przesłanym przez użytkownika tekście nie zostały umieszczone niecenzuralne słowa.
+// Jeżeli jakieś słowo podane ze słownika znajduje się w żądaniu zakończmy cykl wysyłając błąd
+// dla użytkownika końcowego(status błędu 400).
+// Przykładowy słowinik zakazanych słów: ['disco polo', 'piwo', 'hazard', 'cukierki']
+
 const express = require("express");
+const bodyParser = require("body-parser");
 const app = express();
 
 const users = [
   { login: "jan", password: "alamakota" },
   { login: "adam", password: "kotmaale" },
 ];
+
+const filteredStrings = ["disco polo", "piwo", "hazard", "cukierki"];
 
 const logMiddleware = (req, res, next) => {
   console.log("Url:", req.url);
@@ -45,6 +54,18 @@ const authMiddleware = (req, res, next) => {
 
 app.use(logMiddleware);
 app.use(authMiddleware);
+
+app.use(bodyParser.text());
+
+app.post("/", (req, res) => {
+  if (filteredStrings.some((word) => req.body.includes(word))) {
+    res.status(400).send("Zabronione słowa");
+    return;
+  }
+
+  // Tu zadanie 5
+  res.sendStatus(200);
+});
 
 app.get("/", (req, res) => {
   res.sendStatus(200);
