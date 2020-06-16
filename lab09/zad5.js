@@ -16,9 +16,9 @@ const fileNameMiddleware = (req, res, next) => {
   fs.exists(fileName, (exists) => {
     console.log(exists);
     if (exists) {
-      next();
+      res.sendFile(fileName, { root: "." });
     } else {
-      res.status(404).send("File not exists");
+      next();
     }
   });
 };
@@ -27,13 +27,20 @@ app.use(bodyParser.text());
 
 app.post("/:fileName", (req, res) => {
   const fileName = req.params.fileName;
+  let data = req.body;
 
-  if (filteredStrings.some((word) => req.body.includes(word))) {
+  // Jeśli req.body jest puste, to jest wtedy pustym obiektem {},
+  // req.body.includes się wykrzaczy w tej sytuacji, ponieważ nie jest wołane ze stringa...
+  if (typeof data === "object") {
+    data = "";
+  }
+
+  if (filteredStrings.some((word) => data.includes(word))) {
     res.status(400).send("Client send forbidden words!");
     return;
   }
 
-  fs.writeFile(fileName, req.body, (err) => {
+  fs.writeFile(fileName, data, (err) => {
     if (err) {
       res.status(404).send(err.message);
     } else {
