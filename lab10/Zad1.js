@@ -3,17 +3,9 @@ const app = express();
 
 app.set("view engine", "pug");
 app.get("/:name?", function (req, res) {
-  const name = req.params.name;
+  const { name = "world" } = req.params;
 
-  let message = "Hello ";
-  if (name) {
-    message += name;
-  } else {
-    message += "world";
-  }
-
-  message += "!";
-
+  const message = "Hello " + name + "!";
   const scope = { message };
   res.render("index", scope);
 });
