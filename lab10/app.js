@@ -1,35 +1,74 @@
 //---------------------------------------------------1-----------------------------------------
-const express = require('express');
-const app = express();
+// const express = require('express');
+// const app = express();
 
-app.set('views', './views');
-app.set('view engine', 'pug');
+// app.set('views', './views');
+// app.set('view engine', 'pug');
 
-// app.get('/', (req, res) => {
-//   res.render('index', { message: 'Hello world' });
+// app.get('/:name?', (req, res) => {
+//   const { name = 'world' } = req.params;
+
+//   res.render('index', { message: `Hello ${name}` });
 // });
 
-app.get('/:name?', (req, res) => {
-  const { name = 'world' } = req.params;
-
-  res.render('index', { message: `Hello ${name}` });
-});
-
-app.listen(4700, () => console.log('Server listen at port: 4700'));
+// app.listen(4700, () => console.log('Server listen at port: 4700'));
 
 //-------------------------------------------------2--------------------------------------------
 // const express = require('express');
+// const path = require('path');
 // const mustacheExpress = require('mustache-express');
 // const app = express();
 
 // app.engine('mustache', mustacheExpress());
 
 // app.set('view engine', 'mustache');
-// app.set('views', './views');
-// console.log(__dirname);
+// app.set('views', path.join(__dirname, 'views'));
 
-// app.get('/', (req, res) => {
-//   res.render('index');
+// app.get('/:price/:tax', (req, res) => {
+//   const { price, tax } = req.params;
+
+//   const result = (tax * price) / 100;
+//   const withoutTax = price - result;
+
+//   const data = {
+//     price,
+//     tax,
+//     result,
+//     withoutTax,
+//   };
+
+//   res.render('index', data);
 // });
 
 // app.listen(4700, () => console.log('Server listen at port: 4700'));
+
+//-------------------------------------------------3--------------------------------------------
+// const express = require('express');
+// const app = express();
+
+// const errorCatcher = (err, req, res, next) => {
+//   console.log(err);
+
+//   res.send(err.message);
+// };
+
+// app.get('/:a/:b', (req, res) => {
+//   const { a, b } = req.params;
+
+//   if (b === '0') {
+//     throw new Error('You cannot divide by 0');
+//   } else {
+//     const result = a / b;
+//     res.send({ result });
+//   }
+// });
+
+// app.use(errorCatcher);
+
+// app.listen(4700, () => console.log('Server listen at port 4700'));
+
+//-------------------------------------------------4--------------------------------------------
+const express = require('express');
+const app = express();
+
+app.listen(4700, () => console.log('Server listen at port 4700'));
