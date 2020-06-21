@@ -5,17 +5,14 @@ const app = express();
 app.set('views', './views');
 app.set('view engine', 'pug');
 
-app.get('/', (req, res) => {
-  res.render('index', { message: 'Hello world' });
-});
+// app.get('/', (req, res) => {
+//   res.render('index', { message: 'Hello world' });
+// });
 
-app.get('/:name', (req, res) => {
-  const { name = null } = req.params;
-  if (name) {
-    res.render('index', { message: `Hello ${name}` });
-  } else {
-    res.status(404);
-  }
+app.get('/:name?', (req, res) => {
+  const { name = 'world' } = req.params;
+
+  res.render('index', { message: `Hello ${name}` });
 });
 
 app.listen(4700, () => console.log('Server listen at port: 4700'));
