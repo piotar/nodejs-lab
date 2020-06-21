@@ -35,21 +35,22 @@ app.use(express.urlencoded({ extended: false }));
 //     res.render('index', data);
 // });
 
-const div = (a, b) => {
-    if (b === 0) {
-        throw new Error('divide by 0');
-    }
-    return a / b;
-}
 
-app.get('/:var1/:var2', (req, res, next) => {
-    const { var1, var2 } = req.params;
-
+app.get('/:a/:b', (req, res, next) => {
     try {
-        const result = div(var1, var2);
-        console.log(result);
-    } catch (error) {
-        console.log(error.message);
+        const { a, b } = req.params;
+        if (Number(b) === 0) {
+            throw new Error('dzielenie przez 0!');
+        } else {
+            res.send((a / b).toString());
+        }
+    } catch (e) {
+        next(e);
     }
+})
+
+app.use((e, req, res, next) => {
+    res.status(500).send(e.message);
 });
+
 app.listen(3000, () => console.log("Serwer działaaaaaa"));
