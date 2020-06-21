@@ -69,6 +69,22 @@
 
 //-------------------------------------------------4--------------------------------------------
 const express = require('express');
+const util = require('util');
+const path = require('path');
+const fs = require('fs');
 const app = express();
+
+const readFileAsync = util.promisify(fs.readFile);
+
+app.get('/:file', async (req, res, next) => {
+  try {
+    const { file } = req.params;
+    const filePath = path.join(__dirname, 'static', file);
+    const musicFile = await readFileAsync(filePath, 'utf-8');
+    res.send({ musicFile });
+  } catch (e) {
+    next(e);
+  }
+});
 
 app.listen(4700, () => console.log('Server listen at port 4700'));
