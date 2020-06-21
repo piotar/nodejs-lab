@@ -1,7 +1,6 @@
 var express = require('express');
 var path = require('path');
 var mustacheExpress = require('mustache-express');
-
 var app = express();
 
 app.engine('mustache', mustacheExpress());
@@ -27,8 +26,6 @@ app.get('/:price/:tax', (req, res, next) => {
     const { price, tax } = req.params;
     let taxResult = tax * price / 100;
     let taxFree = price - taxResult;
-    console.log(taxResult);
-    console.log(taxFree);
     let data = {
         price,
         tax,
