@@ -66,25 +66,28 @@
 //4-------------------------------------------------------
 const express = require('express');
 const app = express();
+const fs = require("fs");
+const util = require('util');
+const readFileAsync = util.promisify(fs.readFile);
 var mustacheExpress = require('mustache-express');
 
-const checkDivision = (req,res, next) =>{
-    if(parseInt(req.params.number2)===0){
-        res.status(404).send("Wrong number, can't divide by 0")
-    }else{
-        next();
-    }
-}
-const divide = (a,b) =>{
-    return a/b;
-}
+
 // Register '.mustache' extension with The Mustache Express
 app.engine('mustache', mustacheExpress());
-app.set('view engine', 'mustache')
-    app.get('/:number1?/:number2?', checkDivision,  function (req, res) {
-        const {number1, number2} = req.params;
-        const result = divide(parseInt(number1), parseInt(number2));
-        res.render("divide", {number1, number2, result:result.toString()});
+app.set('view engine', 'mustache');
+
+
+    app.get('/:name',  async function (req, res, next) {
+        try{
+            const {name} = req.params;
+            const result = await readFileAsync("./static/"+name);
+         
+                res.send(result);
+            
+        }catch(error){
+            next(error)
+        }
+        
     });
     
 
