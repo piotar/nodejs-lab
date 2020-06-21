@@ -4,7 +4,6 @@ const pug = require('pug');
 const mustacheExpress = require('mustache-express');
 
 app.engine('mustache', mustacheExpress());
-
 app.set('view engine', 'mustache');
 app.set('views', __dirname + '/views');
 
@@ -30,8 +29,21 @@ app.get('/podatek/:tax/:price', (req, res, next) => {
   res.render('index', {price: price, tax: tax, ...result});
 });
 
-app.use((error, req, res, next) => {
-    // ...
+app.get('/:a/:b', (req, res, next) => {
+  try{
+    const {a,b} = req.params;
+    if( Number(b) === 0 ) {
+      throw new Error('dzielenie przez 0!');
+    } else {
+      res.send( (a/b).toString() );
+    }
+  } catch (e) {
+    next(e);
+  }
+})
+
+app.use((e, req, res, next) => {
+  res.status(500).send(e.message);
 });
 
 app.listen(4500, () => console.log('start server'));
