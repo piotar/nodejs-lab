@@ -15,7 +15,7 @@ const calculateTax = (tax, amount) => {
 
 app.get("/podatek/:tax/:amount", (req, res) => {
     const { tax, amount } = req.params
-    res.render("index", {
+    res.render("index2", {
         tax,
         amount,
         resoult: calculateTax(tax, amount)
