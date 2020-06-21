@@ -91,7 +91,7 @@ app.get('/:file', async (req, res, next) => {
     const { file } = req.params;
     const filePath = path.join(__dirname, 'static', file);
     const musicFile = await readFileAsync(filePath, 'utf-8');
-    res.send({ musicFile });
+    res.send(200, musicFile);
   } catch (e) {
     next(e);
   }
@@ -100,3 +100,9 @@ app.get('/:file', async (req, res, next) => {
 app.use(errorHandler);
 
 app.listen(4700, () => console.log('Server listen at port 4700'));
+
+//--------------------------------------------------6--------------------------------------------
+// const express = require('express');
+// const app = express();
+
+// app.listen(4700, () => console.log('Server listen at port 4700'));
