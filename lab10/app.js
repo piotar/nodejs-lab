@@ -67,14 +67,24 @@
 
 // app.listen(4700, () => console.log('Server listen at port 4700'));
 
-//-------------------------------------------------4--------------------------------------------
+//-------------------------------------------------4,5-------------------------------------------
 const express = require('express');
+const mustacheExpress = require('mustache-express');
 const util = require('util');
 const path = require('path');
 const fs = require('fs');
 const app = express();
 
+app.engine('mustache', mustacheExpress());
+app.set('view engine', 'mustache');
+app.set('views', path.join(__dirname, 'views'));
+
 const readFileAsync = util.promisify(fs.readFile);
+
+const errorHandler = (err, req, res, next) => {
+  const data = { err };
+  res.render('error', data);
+};
 
 app.get('/:file', async (req, res, next) => {
   try {
@@ -86,5 +96,7 @@ app.get('/:file', async (req, res, next) => {
     next(e);
   }
 });
+
+app.use(errorHandler);
 
 app.listen(4700, () => console.log('Server listen at port 4700'));
