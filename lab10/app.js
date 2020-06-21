@@ -2,7 +2,7 @@ var express = require('express');
 var path = require('path');
 var mustacheExpress = require('mustache-express');
 var app = express();
-import fs from 'fs';
+var fs = require('fs');
 
 app.engine('mustache', mustacheExpress());
 app.set('view engine', 'mustache');
@@ -70,5 +70,18 @@ app.use((error, req, res, next) => {
     console.log(error.message);
     throw error;
 })
+
+
+app.use((error, req, res, next) => {
+    res.status(error.status || 500);
+    res.json({
+        error: 'Brak pliku',
+    })
+    next(error);
+});
+
+
+
+
 
 app.listen(3000, () => console.log("Serwer działaaaaaa"));
