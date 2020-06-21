@@ -63,7 +63,7 @@
 
 // app.listen(4000, () => console.log('start server'));
 
-//4-------------------------------------------------------
+//4 i 5-------------------------------------------------------
 const express = require('express');
 const app = express();
 const fs = require("fs");
@@ -88,6 +88,10 @@ app.set('view engine', 'mustache');
             next(error)
         }
         
+    });
+    
+    app.use((error, req, res, next) => {
+        res.render("error", {error})
     });
     
 
