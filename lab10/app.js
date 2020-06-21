@@ -50,6 +50,7 @@ app.get('/:a/:b', (req, res, next) => {
 })
 
 app.use((e, req, res, next) => {
+    console.log(error.message);
     res.status(500).send(e.message);
 });
 
