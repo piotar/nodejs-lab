@@ -16,12 +16,10 @@ app.post("/:fileName", (req, res) => {
   const fileName = req.params.fileName;
   
   if (filteredStrings.some((word) => req.body.includes(word))) {
-    res.status(400).send("FORBIDDEN ");
+    res.status(400).send("FORBIDDEN");
     return;
   }
 });
-
-
 
 const fileMiddleware = (req, res, next) => {
     const fileName = req.params.fileName;
