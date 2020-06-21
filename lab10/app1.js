@@ -1,18 +1,19 @@
+
 const express = require("express");
 const app = express();
 
-console.log("pug");
-//test
 app.set("view engine", "pug");
+// app.get("/:name", function (req, res) {
+//   const scope = { title: "some title", header: "heloo!" };
+//   res.render("index", scope);
+// });
 
-
-app.get("/:name?", (req, res) => {
-    const { name = "world" } = req.params;
-
+app.get("/:name?", function (req, res) {
+    const { name = "World" } = req.params;
     res.render("index", {
-        title: "hello",
-        message: `Hello ${name}!`
-    })
-})
+        title: "Hello",
+        message: `Hello ${name}!`,
+    });
+});
 
-app.listen(4000, () => console.log("start server"));
+app.listen(4100, () => console.log("start server"));
