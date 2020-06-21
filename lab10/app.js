@@ -1,7 +1,10 @@
+const fs = require('fs');
+const util = require('util');
 const express = require('express');
-const app = express();
 const pug = require('pug');
 const mustacheExpress = require('mustache-express');
+
+const app = express();
 
 app.engine('mustache', mustacheExpress());
 app.set('view engine', 'mustache');
@@ -29,20 +32,33 @@ app.get('/podatek/:tax/:price', (req, res, next) => {
   res.render('index', {price: price, tax: tax, ...result});
 });
 
+const readFileAsync = util.promisify(fs.readFile);
+
+app.get('/file/:path', async(req, res, next) => {
+  try {
+    const { path } = req.params;
+    const data = await(readFileAsync(`./static/${path}`, 'utf-8'));
+    if( data ) {
+      res.send(data);
+    } else {
+      throw new Error('no such file or directory');
+    }
+  } catch (e) {
+    next(e)
+  }
+});
+
 app.get('/:a/:b', (req, res, next) => {
-  try{
     const {a,b} = req.params;
     if( Number(b) === 0 ) {
       throw new Error('dzielenie przez 0!');
     } else {
       res.send( (a/b).toString() );
     }
-  } catch (e) {
-    next(e);
-  }
-})
+});
 
 app.use((e, req, res, next) => {
+  console.log(e.message);
   res.status(500).send(e.message);
 });
 
