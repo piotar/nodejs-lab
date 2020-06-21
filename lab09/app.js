@@ -23,7 +23,8 @@ var app = express();
 //Zad2
 app.use((req, res, next) => {
     const password = req.headers.authorization;
-    if (password === 'alamakota') {
+    let parts = auth.split(':');
+    if (parts[1] === 'password') {
         next();
     } else {
         res.sendStatus(401);
