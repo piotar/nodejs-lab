@@ -1,4 +1,5 @@
 const axios = require("axios");
+const mustacheExpress = require("mustache-express");
 
 const getUserInfo = async (id) => {
   const userInfo = await axios.get(
@@ -19,6 +20,11 @@ const getUserWeather = async (userInfo) => {
 
 const express = require("express");
 const app = express();
+
+app.engine("mustache", mustacheExpress());
+
+app.set("view engine", "mustache");
+app.set("views", __dirname + "/views");
 
 app.get("/user/:id", async (req, res, next) => {
   const { id } = req.params;
