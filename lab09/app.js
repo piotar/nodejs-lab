@@ -93,3 +93,4 @@ app.listen(5000, ()=> {
     console.log(`it works`);
 })
 
+// -------------------------- zad 5  fs.sendFile!!!!!!!
