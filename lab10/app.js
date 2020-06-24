@@ -3,6 +3,7 @@ const util = require('util');
 const express = require('express');
 const pug = require('pug');
 const mustacheExpress = require('mustache-express');
+const axios = require('axios').default;
 
 const app = express();
 
@@ -41,20 +42,49 @@ app.set('views', __dirname + '/views');
 //     }
 // });
 
-const readFileAsync = util.promisify(fs.readFile);
+// const readFileAsync = util.promisify(fs.readFile);
+//
+// app.get('/file/:path', async (req, res, next) => {
+//   try {
+//     const { path } = req.params;
+//     const data = await(readFileAsync(`./static/${path}`, 'utf-8'));
+//     data && res.send(data);
+//   } catch (e) {
+//     next(e)
+//   }
+// });
 
-app.get('/file/:path', async(req, res, next) => {
+const getUser = async (id) => {
+  const url = `https://jsonplaceholder.typicode.com/users/${id}`;
+  const user = await axios.get(url);
+  return user.data;
+}
+
+const getWeather = async (lat, lng) => {
+  const url = `https://api.openweathermap.org/data/2.5/weather?appid=0ed761300a2725ca778c07831ae64d6e&lat=${lat}&lon=${lng}`;
+  const weather = await axios.get(url);
+  return weather.data;
+}
+
+app.get('/user/:id', async (req, res, next) => {
   try {
-    const { path } = req.params;
-    const data = await(readFileAsync(`./static/${path}`, 'utf-8'));
-    data && res.send(data);
-  } catch (e) {
-    next(e)
+    const { id } = req.params;
+    const userData = await getUser(id);
+    const {geo: {lat, lng}} = userData.address;
+    const weather = await getWeather(lat, lng);
+    res.send({
+      name: userData.name,
+      weather: weather.weather[0].description,
+      temp: weather.main.temp
+    });
+  } catch (err) {
+    next(err)
   }
 });
 
 app.use((e, req, res, next) => {
   if(e.code === 'ENOENT') {
+    console.log(e);
     res.render('error');
   } else {
     console.log(e);
