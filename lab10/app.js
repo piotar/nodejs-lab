@@ -68,41 +68,62 @@
 // app.listen(4700, () => console.log('Server listen at port 4700'));
 
 //-------------------------------------------------4,5-------------------------------------------
+// const express = require('express');
+// const mustacheExpress = require('mustache-express');
+// const util = require('util');
+// const path = require('path');
+// const fs = require('fs');
+// const app = express();
+
+// app.engine('mustache', mustacheExpress());
+// app.set('view engine', 'mustache');
+// app.set('views', path.join(__dirname, 'views'));
+
+// const readFileAsync = util.promisify(fs.readFile);
+
+// const errorHandler = (err, req, res, next) => {
+//   const data = { err };
+//   res.render('error', data);
+// };
+
+// app.get('/:file', async (req, res, next) => {
+//   try {
+//     const { file } = req.params;
+//     const filePath = path.join(__dirname, 'static', file);
+//     const musicFile = await readFileAsync(filePath, 'utf-8');
+//     res.send(200, musicFile);
+//   } catch (e) {
+//     next(e);
+//   }
+// });
+
+// app.use(errorHandler);
+
+// app.listen(4700, () => console.log('Server listen at port 4700'));
+
+//--------------------------------------------------6--------------------------------------------
 const express = require('express');
 const mustacheExpress = require('mustache-express');
-const util = require('util');
 const path = require('path');
-const fs = require('fs');
+const setUserMiddleware = require('./middleware/setUserMiddleware');
+const setWeatherMiddleware = require('./middleware/setWeatherMiddleware');
 const app = express();
 
 app.engine('mustache', mustacheExpress());
 app.set('view engine', 'mustache');
 app.set('views', path.join(__dirname, 'views'));
 
-const readFileAsync = util.promisify(fs.readFile);
+app.use(express.json());
 
 const errorHandler = (err, req, res, next) => {
   const data = { err };
   res.render('error', data);
 };
 
-app.get('/:file', async (req, res, next) => {
-  try {
-    const { file } = req.params;
-    const filePath = path.join(__dirname, 'static', file);
-    const musicFile = await readFileAsync(filePath, 'utf-8');
-    res.send(200, musicFile);
-  } catch (e) {
-    next(e);
-  }
+app.get('/:id', [setUserMiddleware, setWeatherMiddleware], async (req, res) => {
+  res.status(200).json({ user: req.user });
 });
 
 app.use(errorHandler);
 
 app.listen(4700, () => console.log('Server listen at port 4700'));
-
-//--------------------------------------------------6--------------------------------------------
-// const express = require('express');
-// const app = express();
-
-// app.listen(4700, () => console.log('Server listen at port 4700'));
