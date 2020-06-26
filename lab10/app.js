@@ -64,11 +64,45 @@
 // app.listen(4000, () => console.log('start server'));
 
 //4 i 5-------------------------------------------------------
+// const express = require('express');
+// const app = express();
+// const fs = require("fs");
+// const util = require('util');
+// const readFileAsync = util.promisify(fs.readFile);
+// var mustacheExpress = require('mustache-express');
+
+
+// // Register '.mustache' extension with The Mustache Express
+// app.engine('mustache', mustacheExpress());
+// app.set('view engine', 'mustache');
+
+
+//     app.get('/:name',  async function (req, res, next) {
+//         try{
+//             const {name} = req.params;
+//             const result = await readFileAsync("./static/"+name);
+         
+//                 res.send(result);
+            
+//         }catch(error){
+//             next(error)
+//         }
+        
+//     });
+    
+//     app.use((error, req, res, next) => {
+//         res.render("error", {error})
+//     });
+    
+
+// app.listen(4000, () => console.log('start server'));
+
+//6----------------------------------------------------------------------
 const express = require('express');
 const app = express();
 const fs = require("fs");
-const util = require('util');
-const readFileAsync = util.promisify(fs.readFile);
+const axios = require("axios");
+
 var mustacheExpress = require('mustache-express');
 
 
@@ -76,19 +110,34 @@ var mustacheExpress = require('mustache-express');
 app.engine('mustache', mustacheExpress());
 app.set('view engine', 'mustache');
 
-
-    app.get('/:name',  async function (req, res, next) {
-        try{
-            const {name} = req.params;
-            const result = await readFileAsync("./static/"+name);
-         
-                res.send(result);
-            
-        }catch(error){
-            next(error)
+    const exceptionHandler = fn => {
+        return async (req, res, next, ...args) => {
+            try {
+                await fn(req, res, next, ...args);
+            } catch (error) {
+                next(error);
+            }
         }
-        
-    });
+    }
+
+    const  fetchUser = async (id) =>{
+        const userResult = await axios.get(`https://jsonplaceholder.typicode.com/users/${id}`);
+        return userResult.data;
+    }
+
+  const fetchWeather = async (geo) =>{
+        const {lat, lng} = geo;
+        const weatherResult = await axios.get(`https://api.openweathermap.org/data/2.5/weather?appid=0ed761300a2725ca778c07831ae64d6e&lat=${parseInt(lat)}&lon=${parseInt(lng)}`);
+        return weatherResult.data.main;
+    }
+
+    app.get('/user/:id', exceptionHandler( async (req, res, next) => {
+        const user = await fetchUser(req.params.id)
+        let weatherResponse = await fetchWeather(user.address.geo);
+        let {temp} = weatherResponse;
+        temp = parseFloat(temp-273.15).toFixed(2);
+        res.render("user", {user:user, weather: weatherResponse, temp:temp});
+    }));
     
     app.use((error, req, res, next) => {
         res.render("error", {error})
