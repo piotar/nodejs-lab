@@ -52,23 +52,52 @@ const app = express();
 // Stwórzmy aplikację, która będzie dzieliła dwie liczby. W przypadku dzielenia przez 0, aplikacja ma rzucić wyjątkiem.
 // Dodajmy do naszej aplikacji middleware, który wyświetli w konsoli informacje o wystąpieniu błędu.
 
-const calculate = (firstNumber, secondNumber) => {
-  if (secondNumber == 0) {
-    throw new Error("Dzielenie przez 0!");
-  }
-  const result = firstNumber / secondNumber;
-  console.log(firstNumber, secondNumber);
-  return result;
-};
+// const calculate = (firstNumber, secondNumber) => {
+//   if (secondNumber == 0) {
+//     throw new Error("Dzielenie przez 0!");
+//   }
+//   const result = firstNumber / secondNumber;
+//   console.log(firstNumber, secondNumber);
+//   return result;
+// };
 
-app.get("/:firstNumber/:secondNumber", (req, res) => {
-  res.send(`${calculate(req.params.firstNumber, req.params.secondNumber)}`);
+// app.get("/:firstNumber/:secondNumber", (req, res) => {
+//   res.send(`${calculate(req.params.firstNumber, req.params.secondNumber)}`);
+// });
+
+// app.use((error, req, res, next) => {
+//   console.log(error.message);
+//   res.send(error.message);
+// });
+
+// Zadanie 4
+// Stwórzmy WEB API które wczyta podany plik(asynchronicznie!) i wyśle zawartość do użytkownika końcowego.
+// W katalogu 04/static zostały dodane przykładowe pliki.
+// Scenariusz 1: ścieżka: /music.txt - wczytaj zawartość pliku i wyślij do użytkownika
+// Scenariusz 2: ścieżka: /movies.txt - wyrzuci błąd
+// Scenariusz 3: ścieżka: /sample.txt - wczytaj zawartość pliku i wyślij do użytkownika
+
+const fs = require("fs");
+
+app.get("/:fileName", (req, res, next) => {
+  const { fileName } = req.params;
+  fs.readFile(`./static/${fileName}`, "utf-8", (error, data) => {
+    if (error) {
+      next(error);
+    } else {
+      res.send(data);
+    }
+  });
 });
 
 app.use((error, req, res, next) => {
   console.log(error.message);
-  res.send(error.message);
+  throw error;
 });
+
+// Zadanie 5
+// Dodajmy do zdania 4 middleware obsługujący błąd i wyświetlmy swoją stronę z błędem.
+// W zadaniu wykorzystajmy system szablonów mustache
 
 app.listen(4700, () => {
   console.log("Server listen at port: 4700");
