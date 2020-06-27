@@ -28,3 +28,5 @@ app.use((error, req, res, next) => {
 });
 
 app.listen(4500, () => console.log("Server is working..."));
+
+// ZADANIE 6 PRACA DOMOWA
