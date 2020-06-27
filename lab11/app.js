@@ -1,3 +1,5 @@
+const { ObjectId } = require('mongodb');
+
 require('dotenv').config();
 
 const MongoClient = require('mongodb').MongoClient;
@@ -31,11 +33,22 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 client.connect(async err => {
     const collection = client.db("todos").collection("tasks");
 
-    await getTodos(collection)
+    // await getTodos(collection)
 
-    await create(collection, 'kupic jajka', false);
+    // await create(collection, 'kupic jajka', false);
 
     
+    await getTodos(collection)
+
+
+    await collection.updateOne({ _id: ObjectId('5ef74eee175a2c4a343c2eb1') }, { $set: { completed: true} })
+
+
+    await getTodos(collection)
+
+    const deleteResult = await collection.deleteOne({ _id: ObjectId('5ef74eee175a2c4a343c2eb1') })
+    console.log(deleteResult);
+
     await getTodos(collection)
 
 
