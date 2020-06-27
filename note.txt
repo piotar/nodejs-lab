@@ -56,3 +56,19 @@ ZAJECIA 2
          
 pobiera najnowsze zmiany na nowym repo                                                         git fetch --all
 mergowanie zmian z mastera, aby nie naruszyc swojego projektu                                  git merge origin/master
+
+
+ZAJECIA 3 
+Połączenie z bazą MongoDB - instrukcja na git https://github.com/piotar/nodejs/tree/master/lab11
+skopiować kod z MongoDB z konfiguracją hasła i usunąc znaczniki <> wpisujac haslo oraz usunac <> podajac nazwe bazy nazwaną todo
+
+przejsc do katalogu                                                                             cd lab11
+zainstalowac npm                                                                                npm install
+odpalic app                                                                                     node app.js
+torzymy plik .env (musi byc szary, aby git go nie sledzil)
+dodajemy na gorze pliu app.js                       require('dotenv').config();
+
+biblioteka dotenv       do przechowywania credinsiali hasla, loginu itp                         npm i dotenv
+
+
+do kolejnej appki wykorzystującej mongoose                                                      npm i mongoose
