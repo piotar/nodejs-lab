@@ -1,34 +1,42 @@
 require('dotenv').config();
 
-const { ObjectId } = require('mongodb');
-const MongoClient = require('mongodb').MongoClient;
-const uri = process.env.MONGODB_CONNECTION;
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
-client.connect(async err => {
-    const collection = client.db("todo").collection("tasks");
-    // const usersCollection = client.db("todo").collection("users");
-
-    // console.log(await collection.find().toArray());
-
-    // await collection.insertOne({
-    //     task: "kupić lody",
-    //     completed: false,
-    //     createDate: '28.06.2020'
-    // });
-
-    // console.log(await collection.find({ task: 'kupić mleko' }).toArray());
+const mongoose = require('mongoose');
+mongoose.connect(process.env.MONGODB_CONNECTION, { useNewUrlParser: true, useUnifiedTopology: true });
 
 
-    // await collection.updateMany({}, { $set : { createDate: '28.06.2020' }})
 
-
-    // await collection.updateOne({ _id: ObjectId("5ef8b39a4691151dc8df51ce") }, { $set: { completed: true }})
-
-    const result = await collection.deleteMany({ _id: ObjectId("5ef8b33e777c627044938e0c") })
-
-    console.log(result);
-
-    console.log(await collection.find().toArray());
-
-    client.close();
+const Task = mongoose.model('tasks', {
+    task: String,
+    completed: {
+        type: Boolean,
+        default: false,
+    },
 });
+
+
+
+
+(async () => {
+
+
+    const task = new Task({
+        task: 'kupić czekolade',
+        // completed: false,
+    });
+
+    task.completed = true;
+
+    await task.save();
+
+    const tasks = await Task.find();
+    console.log(tasks)
+
+    const taskMleko = await Task.findById('5ef8a87611a455b9501b75e6')
+    taskMleko.completed = true;
+
+    await taskMleko.save();
+
+    console.log(await Task.find())
+
+
+})();
