@@ -22,9 +22,11 @@ client.connect(async err => {
     // await collection.updateMany({}, { $set : { createDate: '28.06.2020' }})
 
 
-    await collection.updateOne({ _id: ObjectId("5ef8b39a4691151dc8df51ce") }, { $set: { completed: true }})
+    // await collection.updateOne({ _id: ObjectId("5ef8b39a4691151dc8df51ce") }, { $set: { completed: true }})
 
+    const result = await collection.deleteMany({ _id: ObjectId("5ef8b33e777c627044938e0c") })
 
+    console.log(result);
 
     console.log(await collection.find().toArray());
 
