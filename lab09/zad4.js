@@ -2,6 +2,7 @@
 
 const express = require("express");
 const bodyParser = require("body-parser");
+const fs = require("fs");
 const app = express();
 
 app.use(bodyParser.text());
@@ -12,11 +13,16 @@ const firboddenWordsTest = (req, res, next) => {
   if (isFirbodden) {
     res.status(400).send("Nie cenzuralne słowo!");
   }
-  next();
+  fs.writeFile("dane.txt", req.body, next);
 };
-app.use(firboddenWordsTest);
 
-app.post("/", (req, res) => {
+app.get("/", (req, res) => {
+  fs.readFile("dane.txt", "utf8", (error, data) => {
+    res.send(data);
+  });
+});
+
+app.post("/", firboddenWordsTest, (req, res) => {
   res.send("Hallo!!");
 });
 
