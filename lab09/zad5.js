@@ -7,19 +7,13 @@ const app = express();
 const showFile = (req, res, next) => {
   const filePath = path.join(__dirname, req.originalUrl);
 
-  fs.access(filePath, fs.constants.F_OK, (error) => {
-    if (error) {
-      console.log(error);
-      next();
-    } else {
-      res.sendFile(path, (err) => {
-        if (err) {
-          console.log(err);
-          next();
-        }
-      });
-    }
-  });
+  if (fs.existsSync(filePath)) {
+    console.log("file exist");
+    res.sendFile(filePath);
+  } else {
+    console.log("file dont exist");
+    next();
+  }
 };
 
 app.get("/:path?", showFile, (req, res) => {
