@@ -1,0 +1,26 @@
+<html>
+  <head>
+    <title>{{title}}</title>
+    <style>
+      .red {
+        color: red;
+      }
+      .green {
+        color: green;
+      }
+      .blue {
+        color: blue;
+      }
+      span{
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body >
+    <h1 class="red">{{title}}</h1>
+    <p>Cena: <span class="blue">{{value}}</span></p>
+    <p>Podatek: <span class="blue">{{tax}}%</span></p>
+    <h3>Obliczony podatek: <span class="red">{{amountTax}}</span></h3>
+    <h3>Kwota bez podatku: <span class="green">{{amountWithoutTax}}</span></h3>
+  </body>
+</html>
