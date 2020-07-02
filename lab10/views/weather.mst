@@ -1,0 +1,18 @@
+<html>
+    <head>
+        <title>{{title}}</title>
+        <style>
+           
+        </style>
+    </head>
+    <body>
+        <h1>Weather for <b>{{city}}</b></h1>
+        <h3>User: {{name}}</h3>
+        <p>Temperature: {{temp}} C&#176;</p>
+        <p>Pressure: {{pressure}}</p>
+        <p>Wind speed: {{windSpeed}}</p>
+        <p>Sunrise: {{sunrise.h}} : {{sunrise.m}}</p>
+        <p>Sunset: {{sunset.h}} : {{sunset.m}}</p>
+        
+    </body>
+</html>
