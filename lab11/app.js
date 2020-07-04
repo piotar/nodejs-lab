@@ -27,11 +27,11 @@ const client = new MongoClient(uri, {
 client.connect(async (err) => {
   const collection = client.db("todo").collection("tasks");
 
-  getTodos(collection);
+  await getTodos(collection);
 
   await creat(collection, "Pomalować płot", false);
 
-  getTodos(collection);
+  await getTodos(collection);
 
   client.close();
 });
