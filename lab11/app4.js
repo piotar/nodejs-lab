@@ -46,9 +46,9 @@ const Task = mongoose.model('tasks', {
 
 
 
-    // // POCZĄTEK - wyświetlenie wszystkich danych "user"
-    // const task = await Task.findOne().populate('user');
-    // console.log(task);
-    // // KONIEC - wyświetlenie wszystkich danych "user"
+    // POCZĄTEK - wyświetlenie wszystkich danych "user"
+    const task = await Task.findOne().populate('user');
+    console.log(task);
+    // KONIEC - wyświetlenie wszystkich danych "user"
 
 })();
