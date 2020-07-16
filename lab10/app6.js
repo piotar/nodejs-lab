@@ -53,14 +53,4 @@ app.use((error, req, res, next) => {
   });
 });
 
-// app.use((e, req, res, next) => {
-//   if (e.code === "ENOENT") {
-//     console.log(e);
-//     res.render("error");
-//   } else {
-//     console.log(e);
-//     res.status(500).send(e.message);
-//   }
-// });
-
 app.listen(4000, () => console.log("start server"));

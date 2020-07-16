@@ -9,8 +9,14 @@ const client = new MongoClient(uri, {
 client.connect(async (err) => {
   const collection = client.db("todo").collection("tasks");
 
-  const result = await collection.find().toArray();
-  console.log(result);
+  console.log(await collection.find().toArray());
+
+  await collection.insertOne({
+    task: "kupić lody",
+    completed: false,
+  });
+
+  console.log(await collection.find().toArray());
 
   client.close();
 });
