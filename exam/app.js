@@ -1,49 +1,66 @@
 require("dotenv").config();
 
-const { ObjectId } = require("mongodb");
-const MongoClient = require("mongodb").MongoClient;
-const uri = process.env.MONGODB_CONNECTION;
-const client = new MongoClient(uri, {
+const mongoose = require("mongoose");
+mongoose.connect(process.env.MONGODB_CONNECTION, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
-client.connect(async (err) => {
-  const collection = client.db("Ads_Board").collection("Ads_collection");
-  //   const userCollection = client.db("Ads_Board").collection("Ads_users"); // możliwa jest modyfikacja kilku kolekcji na raz, np ogłoszeń i userwó
 
-  //   console.log(await collection.find().toArray()); //pobieranie całej kolekcji
+const User = require("./user.model");
+const Advertisement = require("./adv.model");
 
-  //   dodawanie do kolekcji
-  //   await collection.insertOne({
-  //     title: "Jeep",
-  //     category: ["cars", "AGD"],
-  //     author: "Johnny Rambo",
-  //     active: true,
-  //     price: 18000,
-  //     description: "selling Jeep with washdisher inside, year 2000",
-  //     phone: 668979444,
-  //   });
+const express = require("express");
+const app = express();
 
-  // //wyszukiwanie w kolekcji
-  //   console.log(await collection.find({ active: false }).toArray());
+app.use(express.json());
 
-  //  modyfikacja wielu rekordów
-  //   await collection.updateMany({}, { $set: { createDate: "16.07.2020" } }); //doda pole createDate do każdego rekordu
-
-  // modyfikacja jednego na podstawie id:
-  //   await collection.updateOne(
-  //     { _id: ObjectId("5f109bcc4433bd00204a4484") },
-  //     { $set: { active: false } }
-  //   );
-
-  // kasowanie wielu
-  //   const result = await collection.deleteMany({
-  //     _id: ObjectId("5f109fec59873831a8ed5ef0"),
-  //   });
-
-  //   console.log(result); // każde polecenie zwraca obiekt z masą informacji. Możemy tam np sprawdzić deleteCount - ile rekordów usunięto
-
-  console.log(await collection.find().toArray());
-
-  client.close();
+app.get("/advertisements", async (req, res) => {
+  const advertisement = await Advertisement.find(req.query);
+  res.send(advertisement);
 });
+
+app.post("/advertisements", async (req, res) => {
+  const advertisement = new Advertisement(req.body);
+  await advertisement.save();
+  res.status(201).send(advertisement);
+});
+
+app.listen(4000, () => console.log("server started"));
+
+// (async () => {
+//   const advertisement = new Advertisement({
+//     title: "Teddy bear",
+//     category: "toys",
+//     active: true,
+//     price: "20PLN",
+//   });
+
+//   advertisement.active = false;
+
+//   await advertisement.save();
+
+//   const advertisements = await Advertisement.find();
+//   console.log(advertisements);
+
+//   const user = new User({
+//     firstName: "Jan",
+//     lastName: "Nowak",
+//   });
+//   await user.save();
+
+//   const advertisementFord = await Advertisement.findById(
+//     "5f10b28f5f0a236dffcc06ce"
+//   );
+
+//   advertisementFord.user = user;
+
+//   //   advertisementFord.active = false;
+
+//   await advertisementFord.save();
+
+//   console.log(
+//     await Advertisement.find({ active: true, title: "Nissan Patrol" }).populate(
+//       "user"
+//     )
+//   );
+// })();
