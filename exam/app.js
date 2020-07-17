@@ -45,6 +45,13 @@ app.post("/advertisements", async (req, res) => {
   res.status(201).send(advertisement);
 });
 
+// post advertisements with new user:
+// app.post("/advertisements/new_user", async (req, res) => {
+//   const advertisement = new Advertisement(req.body);
+//   await advertisement.save();
+//   res.status(201).send(advertisement);
+// });
+
 // get all advertisements:
 app.get("/advertisements", async (req, res) => {
   const advertisement = await Advertisement.find(req.query).populate("user");
@@ -72,14 +79,42 @@ app.get("/advertisements/category/:category", async (req, res) => {
   res.send(advertisement);
 });
 
-// get advertisement by price:
-// app.get("/advertisements/price/:option/:price", async (req, res) => {
-//   const { option, price } = req.params;
-//   switch (option)
+// get advertisement by user ID:
+app.get("/advertisements/userid/:id", async (req, res) => {
+  const { id } = req.params;
+  const advertisement = await Advertisement.find({
+    user: { _id: id },
+  }).populate("user");
+  res.send(advertisement);
+});
 
-//   const advertisement = await Advertisement.find({ title }).populate("user");
-//   res.send(advertisement);
-// });
+// get advertisement by price:
+// grater or equal: option=gte
+// equal: option=eq
+// smaller or equal: option=lte
+app.get("/advertisements/price/:option/:price", async (req, res) => {
+  const { option, price } = req.params;
+  switch (option) {
+    case "gte":
+      advertisement = await Advertisement.find({
+        price: { $gte: price },
+      }).populate("user");
+      break;
+    case "lte":
+      advertisement = await Advertisement.find({
+        price: { $lte: price },
+      }).populate("user");
+      break;
+    case "eq":
+      advertisement = await Advertisement.find({
+        price: { $eq: price },
+      }).populate("user");
+      break;
+  }
+  res.send(advertisement);
+});
+
+//sort and find by date: https://mongoosejs.com/docs/tutorials/dates.html
 
 //update advertisement by ID:
 app.put("/advertisements/:id", async (req, res) => {
@@ -98,42 +133,8 @@ app.delete("/advertisements/:id", async (req, res) => {
   res.status(200).send(`adv nr:${id} deleted`);
 });
 
+//add error handling to all operations !!!
+//add password and user protection
+//add more than one category possible to add
+
 app.listen(4000, () => console.log("server started"));
-
-// (async () => {
-//   const advertisement = new Advertisement({
-//     title: "Teddy bear",
-//     category: "toys",
-//     active: true,
-//     price: "20PLN",
-//   });
-
-//   advertisement.active = false;
-
-//   await advertisement.save();
-
-//   const advertisements = await Advertisement.find();
-//   console.log(advertisements);
-
-//   const user = new User({
-//     firstName: "Jan",
-//     lastName: "Nowak",
-//   });
-//   await user.save();
-
-//   const advertisementFord = await Advertisement.findById(
-//     "5f10b28f5f0a236dffcc06ce"
-//   );
-
-//   advertisementFord.user = user;
-
-//   //   advertisementFord.active = false;
-
-//   await advertisementFord.save();
-
-//   console.log(
-//     await Advertisement.find({ active: true, title: "Nissan Patrol" }).populate(
-//       "user"
-//     )
-//   );
-// })();
