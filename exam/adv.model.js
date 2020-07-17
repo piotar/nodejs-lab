@@ -8,10 +8,15 @@ module.exports = mongoose.model("ads", {
     default: true,
   },
   price: Number,
-  date: {
-    type: Date,
-    default: new Date(),
+  currency: {
+    type: String,
+    default: "PLN",
   },
+  createDate: {
+    type: Date,
+    default: Date.now,
+  },
+  description: String,
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "users",
