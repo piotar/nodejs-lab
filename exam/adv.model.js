@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 module.exports = mongoose.model("ads", {
   title: String,
-  category: String,
+  category: [String],
   active: {
     type: Boolean,
     default: true,

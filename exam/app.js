@@ -1,6 +1,8 @@
 require("dotenv").config();
+
 const atob = require("atob");
 const mongoose = require("mongoose");
+
 mongoose.connect(process.env.MONGODB_CONNECTION, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -142,7 +144,6 @@ app.get("/advertisements/price/:option/:price", async (req, res) => {
         advertisement = await Advertisement.find({
           price: { $lte: price },
         }).populate("user");
-
         break;
       case "eq":
         advertisement = await Advertisement.find({
@@ -162,10 +163,9 @@ app.get("/advertisements/price/:option/:price", async (req, res) => {
 app.put("/advertisements/:id", authorizationMiddleweare, async (req, res) => {
   const { id } = req.params;
   try {
-    const advertisement = await Advertisement.findByIdAndUpdate(
-      id,
-      req.body
-    ).populate("user");
+    const advertisement = await Advertisement.findByIdAndUpdate(id, req.body, {
+      new: true,
+    }).populate("user");
     res.status(200).send(advertisement);
   } catch (err) {
     res.status(404).send(err.message);
